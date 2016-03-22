@@ -1,0 +1,33 @@
+{
+  "port": 3333,
+  "env": "development",
+  "development": {
+    "username": "user",
+    "password": "password",
+    "database": "db",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "define": {
+      "createdAt":"created_at",
+      "updatedAt":"updated_at"
+    }
+  },
+  "test": {
+    "username": "user",
+    "password": "password",
+    "database": "db",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "define": {
+      "createdAt":"created_at",
+      "updatedAt":"updated_at"
+    }
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
