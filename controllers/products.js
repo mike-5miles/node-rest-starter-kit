@@ -1,11 +1,11 @@
-var model = require('../models')
+var Product = require('../models').products
 var co = require('bluebird').coroutine
 
-var products = {
+var ProductsController = {
 
   getAll: function (req, res) {
     return co(function * () {
-      var allProducts = yield model.products.findAll()
+      var allProducts = yield Product.findAll()
       res.status(200).json(allProducts || [])
     })()
   },
@@ -13,7 +13,7 @@ var products = {
   getOne: function (req, res) {
     var id = req.params.id
     return co(function * () {
-      var product = yield model.products.findById(id)
+      var product = yield Product.findById(id)
       res.status(200).json(product || {})
     })()
   },
@@ -21,7 +21,7 @@ var products = {
   create: function (req, res) {
     var args = req.body
     return co(function * () {
-      var newProduct = yield model.products.create(args)
+      var newProduct = yield Product.create(args)
       res.status(201).json(newProduct || {})
     })()
   },
@@ -30,7 +30,7 @@ var products = {
     var args = req.body
     var id = req.params.id
     return co(function * () {
-      var product = yield model.products.findById(id)
+      var product = yield Product.findById(id)
       var updatedProduct
       if (product != null) {
         updatedProduct = yield product.update(args)
@@ -42,10 +42,10 @@ var products = {
   delete: function (req, res) {
     var id = req.params.id
     return co(function * () {
-      var rows = yield model.products.destroy({where: {id: id}})
+      var rows = yield Product.destroy({where: {id: id}})
       res.status(200).json({rows: rows || 0})
     })()
   }
 }
 
-module.exports = products
+module.exports = ProductsController

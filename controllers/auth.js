@@ -1,6 +1,6 @@
 var jwt = require('jwt-simple')
 
-var auth = {
+var AuthController = {
 
   login: function (req, res) {
     var username = req.body.username || ''
@@ -16,7 +16,7 @@ var auth = {
     }
 
     // Fire a query to your DB and check if the credentials are valid
-    var dbUserObj = auth.validate(username, password)
+    var dbUserObj = AuthController.validate(username, password)
 
     if (!dbUserObj) { // If authentication fails, we send a 401 back
       res.status(401)
@@ -77,4 +77,4 @@ function expiresIn (numDays) {
   return dateObj.setDate(dateObj.getDate() + numDays)
 }
 
-module.exports = auth
+module.exports = AuthController

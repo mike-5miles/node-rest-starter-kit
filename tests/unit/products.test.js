@@ -3,11 +3,11 @@ process.env.NODE_ENV = 'test'
 var request = require('supertest')
 var expect = require('chai').expect
 var app = require('../../server')
-var model = require('../../models')
+var Product = require('../../models').products
 
 describe('API: products', function () {
   before(function (done) {
-    model.products.sync({ force: true })
+    Product.sync({ force: true })
       .then(function () {
         done()
       })
