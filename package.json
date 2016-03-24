@@ -1,7 +1,7 @@
 {
-  "name": "myRESTfulApp",
+  "name": "node-rest-starter-kit",
   "version": "0.1.0",
-  "description": "myRESTfulApp",
+  "description": "node-rest-starter-kit",
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js --trace-sync-io",
@@ -9,9 +9,10 @@
     "lint:fix": "npm run lint -- --fix",
     "prod": "NODE_ENV=production node server.js",
     "test": "grunt mochaTest",
-    "coverage": "grunt coverage"
+    "coverage": "grunt coverage",
+    "ci-coverage": "istanbul cover _mocha -- -R tap tests/unit/**/*.test.js > test.tap && istanbul report clover",
+    "ci-lint": "eslint -f checkstyle . > checkstyle-result.xml"
   },
-  "author": "Arvind Ravulavaru",
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.3.4",
