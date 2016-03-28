@@ -1,4 +1,5 @@
 var express = require('express')
+var path = require('path')
 var bodyParser = require('body-parser')
 
 var config = require('./config/config.json')
@@ -32,6 +33,9 @@ app.use(requestLogger)
 
 app.use('/', require('./routes'))
 app.use('/api/v1/', require('./routes/v1.js'))
+app.get('/api/v1/swagger.yaml', function (req, res) {
+  res.sendFile('swagger.yaml', { root: path.join(__dirname, 'config') })
+})
 
 // If no route is matched by now, it must be a 404
 app.use(function (req, res, next) {
