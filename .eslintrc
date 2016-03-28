@@ -11,5 +11,9 @@
     "beforeEach" : false,
     "after"      : false,
     "afterEach"  : false
+  },
+  "rules": {
+    "max-len": [2, 120, 2],
+    "camelcase":2
   }
 }
