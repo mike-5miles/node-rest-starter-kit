@@ -1,5 +1,4 @@
 node_modules/**
-migrations/**
-models/**
-seeders/**
+db/**
 coverage/**
+build/**

@@ -1,9 +1,10 @@
-process.env.NODE_ENV = 'test'
+import request from 'supertest'
+import chai from 'chai'
+import app from '../../src/server'
+import models from '../../db/models'
 
-var request = require('supertest')
-var expect = require('chai').expect
-var app = require('../../server')
-var Product = require('../../models').products
+const expect = chai.expect
+const Product = models.products
 
 describe('API: products', function () {
   before(function (done) {

@@ -1,11 +1,11 @@
-var winston = require('winston')
-var expressWinston = require('express-winston')
+import winston from 'winston'
+import expressWinston from 'express-winston'
 
-var config = require('../config/config.json')
-var env = process.env.NODE_ENV || config.env || 'development'
+import config from '../../config/config.json'
+const env = process.env.NODE_ENV || config.env || 'development'
 
 // default app logger
-var appLogger = new (winston.Logger)({
+const appLogger = new (winston.Logger)({
   transports: [
     new (winston.transports.File)({
       filename: './logs/app.log',
@@ -30,7 +30,7 @@ if (env === 'development') {
 }
 
 // request|response logger
-var winstonInstance = new (winston.Logger)({
+const winstonInstance = new (winston.Logger)({
   transports: [
     new (winston.transports.File)({
       filename: './logs/req-res.log',
@@ -55,7 +55,7 @@ if (env === 'development') {
 }
 
 expressWinston.bodyWhitelist.push('name')
-var requestLogger = expressWinston.logger({
+const requestLogger = expressWinston.logger({
   winstonInstance: winstonInstance,
   requestWhitelist: ['body'],
   responseWhitelist: ['body'],

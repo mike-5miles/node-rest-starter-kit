@@ -1,5 +1,7 @@
-var router = require('express-promise-router')()
-var ProductsController = require('../controllers/products')
+import Router from 'express-promise-router'
+const router = Router()
+
+import ProductsController from '../controllers/products'
 
 /*
  * Routes that can be accessed only by autheticated users

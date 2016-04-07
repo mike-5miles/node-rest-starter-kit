@@ -1,12 +1,14 @@
-var express = require('express')
-var path = require('path')
-var bodyParser = require('body-parser')
+import express from 'express'
+import path from 'path'
+import bodyParser from 'body-parser'
 
-var config = require('./config/config.json')
-var appLogger = require('./utils/logger').app
-var requestLogger = require('./utils/logger').request
+import config from '../config/config.json'
+import logger from './utils/logger'
 
-var app = express()
+const appLogger = logger.app
+const requestLogger = logger.request
+
+const app = express()
 app.use(bodyParser.json())
 
 app.all('/*', function (req, res, next) {
@@ -45,12 +47,12 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
   appLogger.error(err)
-  var statusCode = err.status || 500
+  const statusCode = err.status || 500
   res.status(statusCode).send({error: err.message})
 })
 
 // Start the server
-var port = process.env.PORT || config.server_port || 3000
+const port = process.env.PORT || config.server_port || 3000
 app.listen(port, function () {
   appLogger.info('Server listening on port ' + port)
 })

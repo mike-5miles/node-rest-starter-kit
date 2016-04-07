@@ -4,3 +4,4 @@ coverage
 logs/**/*
 config/config.json
 node_modules
+build

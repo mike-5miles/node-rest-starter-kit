@@ -1,7 +1,8 @@
 {
+  "parser": "babel-eslint",
   "extends": "standard",
   "plugins": [
-      "standard"
+      "flow-vars"
   ],
   "globals"   : {
     /* MOCHA */
@@ -13,6 +14,8 @@
     "afterEach"  : false
   },
   "rules": {
+    "flow-vars/define-flow-type": 1,
+    "flow-vars/use-flow-type": 1,
     "max-len": [2, 120, 2],
     "camelcase":2
   }

@@ -1,7 +1,7 @@
-var express = require('express')
-var router = express.Router()
+import express from 'express'
+const router = express.Router()
 
-var AuthController = require('../controllers/auth')
+import AuthController from '../controllers/auth'
 
 /*
  * Routes that can be accessed by any one

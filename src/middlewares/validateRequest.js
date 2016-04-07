@@ -1,5 +1,5 @@
-var jwt = require('jwt-simple')
-var validateUser = require('../controllers/auth').validateUser
+import jwt from 'jwt-simple'
+import { validateUser } from '../controllers/auth'
 
 module.exports = function (req, res, next) {
   // When performing a cross domain request, you will recieve
@@ -9,16 +9,16 @@ module.exports = function (req, res, next) {
   // We skip the token outh for [OPTIONS] requests.
   // if(req.method == 'OPTIONS') next();
 
-  var token = (req.body && req.body.access_token) ||
+  const token = (req.body && req.body.access_token) ||
               (req.query && req.query.access_token) ||
               req.headers['x-access-token']
-  var key = (req.body && req.body.x_key) ||
+  const key = (req.body && req.body.x_key) ||
             (req.query && req.query.x_key) ||
             req.headers['x-key']
 
   if (token || key) {
     try {
-      var decoded = jwt.decode(token, require('../config/secret.js')())
+      const decoded = jwt.decode(token, require('../config/secret.js')())
 
       if (decoded.exp <= Date.now()) {
         res.status(400)
