@@ -18,7 +18,7 @@ describe('API: products', function () {
   })
 
   it('should add a SINGLE product on /products POST', function (done) {
-    var postData = {
+    const postData = {
       'name': 'test'
     }
     request(app)
@@ -28,7 +28,7 @@ describe('API: products', function () {
       .expect('Content-Type', /json/)
       .expect(201)
       .end(function (err, res) {
-        var data = JSON.parse(res.text)
+        const data = JSON.parse(res.text)
         expect(err).to.be.null
         expect(data.id).to.equal(1)
         expect(data.name).to.equal(postData.name)
@@ -42,7 +42,7 @@ describe('API: products', function () {
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
-        var data = JSON.parse(res.text)
+        const data = JSON.parse(res.text)
         expect(err).to.be.null
         expect(data.length).to.equal(1)
         expect(data[0].id).to.equal(1)
@@ -52,7 +52,7 @@ describe('API: products', function () {
   })
 
   it('should update a SINGLE product on /product/1 PUT', function (done) {
-    var postData = {
+    const postData = {
       name: 'new'
     }
     request(app)
@@ -62,7 +62,7 @@ describe('API: products', function () {
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
-        var data = JSON.parse(res.text)
+        const data = JSON.parse(res.text)
         expect(err).to.be.null
         expect(data.id).to.equal(1)
         expect(data.name).to.equal(postData.name)
@@ -71,7 +71,7 @@ describe('API: products', function () {
   })
 
   it('should return an empty object on /product/2 PUT', function (done) {
-    var postData = {
+    const postData = {
       name: 'new'
     }
     request(app)
@@ -81,7 +81,7 @@ describe('API: products', function () {
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
-        var data = JSON.parse(res.text)
+        const data = JSON.parse(res.text)
         expect(err).to.be.null
         expect(data).to.be.empty
         done()
@@ -94,7 +94,7 @@ describe('API: products', function () {
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
-        var data = JSON.parse(res.text)
+        const data = JSON.parse(res.text)
         expect(err).to.be.null
         expect(data.id).to.equal(1)
         expect(data.name).to.equal('new')
@@ -108,7 +108,7 @@ describe('API: products', function () {
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
-        var data = JSON.parse(res.text)
+        const data = JSON.parse(res.text)
         expect(err).to.be.null
         expect(data).to.be.empty
         done()
@@ -121,7 +121,7 @@ describe('API: products', function () {
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
-        var data = JSON.parse(res.text)
+        const data = JSON.parse(res.text)
         expect(err).to.be.null
         expect(data.rows).to.equal(1)
         done()
@@ -134,7 +134,7 @@ describe('API: products', function () {
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
-        var data = JSON.parse(res.text)
+        const data = JSON.parse(res.text)
         expect(err).to.be.null
         expect(data.rows).to.equal(0)
         done()
