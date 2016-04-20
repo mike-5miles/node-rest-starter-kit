@@ -1,0 +1,289 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.0.1",
+        "title": "node-rest-starter-kit"
+    },
+    "host": "127.0.0.1:3333",
+    "basePath": "/api/v1",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/products": {
+            "get": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "get all products",
+                "description": "get all products",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "description": "API key",
+                        "in": "header",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return an array of products or [] if not found",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Product"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "create a new product",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "description": "API key",
+                        "in": "header",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "description": "new product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "return the newly created product",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}/cancel": {
+            "post": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "cancel product by id",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "description": "API key",
+                        "in": "header",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return the product or {} if not found",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "get product by id",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "description": "API key",
+                        "in": "header",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return the product or {} if not found",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "update a product",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "description": "API key",
+                        "in": "header",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "description": "product to update",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return the updated product or {} if not found",
+                        "schema": {
+                            "$ref": "#/definitions/Product"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "product"
+                ],
+                "summary": "delete a product",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "description": "API key",
+                        "in": "header",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return number of rows affected",
+                        "schema": {
+                            "$ref": "#/definitions/RowsAffected"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Product": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "product name"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "created at"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "updated at"
+                }
+            }
+        },
+        "ErrorResponse": {
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "RowsAffected": {
+            "properties": {
+                "rows": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

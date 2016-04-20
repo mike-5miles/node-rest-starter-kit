@@ -56,7 +56,7 @@ describe('API: products', function () {
       name: 'new'
     }
     request(app)
-      .put('/api/v1/product/1')
+      .put('/api/v1/products/1')
       .type('json')
       .send(postData)
       .expect('Content-Type', /json/)
@@ -75,7 +75,7 @@ describe('API: products', function () {
       name: 'new'
     }
     request(app)
-      .put('/api/v1/product/2')
+      .put('/api/v1/products/2')
       .type('json')
       .send(postData)
       .expect('Content-Type', /json/)
@@ -90,7 +90,7 @@ describe('API: products', function () {
 
   it('should get a SINGLE product on /product/1 GET', function (done) {
     request(app)
-      .get('/api/v1/product/1')
+      .get('/api/v1/products/1')
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
@@ -104,7 +104,7 @@ describe('API: products', function () {
 
   it('should get an empty object on /product/2 GET', function (done) {
     request(app)
-      .get('/api/v1/product/2')
+      .get('/api/v1/products/2')
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
@@ -117,7 +117,7 @@ describe('API: products', function () {
 
   it('should delete a SINGLE product on /product/1 DELETE', function (done) {
     request(app)
-      .delete('/api/v1/product/1')
+      .delete('/api/v1/products/1')
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
@@ -130,7 +130,7 @@ describe('API: products', function () {
 
   it('should return 0 on /product/1 DELETE again', function (done) {
     request(app)
-      .delete('/api/v1/product/1')
+      .delete('/api/v1/products/1')
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
