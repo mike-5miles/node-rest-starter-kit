@@ -1,43 +1,55 @@
 import express from 'express'
-import bodyParser from 'body-parser'
 import cors from 'cors'
 
 import swaggerTools from 'swagger-tools'
-import swaggerDoc from '../config/swagger.json'
+import path from 'path'
+import jsyaml from 'js-yaml'
+import fs from 'fs'
 
 import config from '../config/config.json'
-import logger from './utils/logger'
-import routes from './routes'
+import logger from './middlewares/logger'
+import responseExt from './middlewares/response'
 
 const appLogger = logger.app
 const requestLogger = logger.request
 
 const app = express()
-app.use(bodyParser.json())
 app.use(cors())
 
-// request|response logging
-app.use(requestLogger)
+// swaggerRouter configuration
+const env = process.env.NODE_ENV || config.env || 'development'
+const options = {
+  useStubs: env === 'development',
+  controllers: path.resolve(__dirname, 'controllers')
+}
 
-// router
-app.use('/', routes)
-
-// error handler
-app.use(function (err, req, res, next) {
-  appLogger.error(err)
-  const statusCode = err.status || 500
-  res.status(statusCode).send({error: err.message})
-})
-
-// // Swagger Docs
-
+// The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
+var spec = fs.readFileSync(path.resolve(__dirname, '..', 'config/swagger.yaml'), 'utf8')
+var swaggerDoc = jsyaml.safeLoad(spec)
 // Initialize the Swagger middleware
 swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
   app.use(middleware.swaggerMetadata())
-
+  // Validate Swagger requests
+  app.use(middleware.swaggerValidator())
   // Serve the Swagger documents and Swagger UI
   app.use(middleware.swaggerUi())
+
+  // request|response logging
+  app.use(requestLogger)
+  // build json response
+  app.use(responseExt)
+
+  // enable async/await error handler
+  const wrap = (fn) => (...args) => fn(...args).catch(args[2])
+  // Route validated requests to appropriate controller
+  app.use(wrap(middleware.swaggerRouter(options)))
+
+  // error handler
+  app.use(function (err, req, res, next) {
+    appLogger.error(err)
+    res.status(500).json({error: err.message})
+  })
 
   // Start the server
   const port = process.env.PORT || config.server_port || 3000

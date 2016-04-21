@@ -1,65 +1,52 @@
-import { products as Product } from '../../db/models'
+import ProductService from '../services/products'
+import CRUD from '../lookups/crud'
 
-class ProductsController {
-  registerRoutes (router) {
-    router.get('/', this.getAll.bind(this))
-    router.get('/:id', this.getSingle.bind(this))
-    router.post('/', this.create.bind(this))
-    router.put('/:id', this.update.bind(this))
-    router.delete('/:id', this.delete.bind(this))
-    router.post('/:id/cancel', this.cancel.bind(this))
-  }
+module.exports = {
+  getAll: function (req, res, next) {
+    return ProductService.getAll()
+      .then(function (data) {
+        return res.jsonSuccess(CRUD.read, data)
+      })
+  },
 
-  getAll (req, res) {
-    const asyncFunc = async function () {
-      const allProducts = await Product.findAll()
-      res.status(200).json(allProducts || [])
-    }
-    return asyncFunc()
-  }
+  getSingle: function (req, res, next) {
+    const id = req.swagger.params.id.value
+    return ProductService.getSingle(id)
+      .then(function (data) {
+        return res.jsonSuccess(CRUD.read, data)
+      })
+  },
 
-  getSingle (req, res) {
-    const id = req.params.id
-    return (async function () {
-      const product = await Product.findById(id)
-      res.status(200).json(product || {})
-    })()
-  }
+  create: function (req, res) {
+    const product = req.swagger.params.product.value
+    return ProductService.create(product)
+      .then(function (data) {
+        return res.jsonSuccess(CRUD.create, data)
+      })
+  },
 
-  create (req, res) {
-    const args = req.body
-    return (async function () {
-      const newProduct = await Product.create(args)
-      res.status(201).json(newProduct || {})
-    })()
-  }
+  update: function (req, res) {
+    const product = req.swagger.params.product.value
+    const id = req.swagger.params.id.value
+    return ProductService.update(id, product)
+      .then(function (data) {
+        return res.jsonSuccess(CRUD.update, data)
+      })
+  },
 
-  update (req, res) {
-    const args = req.body
-    const id = req.params.id
-    return (async function () {
-      const product = await Product.findById(id)
-      let updatedProduct
-      if (product != null) {
-        updatedProduct = await product.update(args)
-      }
-      res.status(200).json(updatedProduct || {})
-    })()
-  }
+  delete: function (req, res) {
+    const id = req.swagger.params.id.value
+    return ProductService.delete(id)
+      .then(function (data) {
+        return res.jsonSuccess(CRUD.delete, data)
+      })
+  },
 
-  delete (req, res) {
-    const id = req.params.id
-    return (async function () {
-      const rows = await Product.destroy({where: {id: id}})
-      res.status(200).json({rows: rows || 0})
-    })()
-  }
-
-  cancel (req, res) {
-    return (async function () {
-      res.status(200).json({rows: 0 || 0})
-    })()
+  cancel: function (req, res) {
+    const id = req.swagger.params.id.value
+    return ProductService.cancel(id)
+      .then(function (data) {
+        return res.jsonSuccess(CRUD.update, data)
+      })
   }
 }
-
-module.exports = new ProductsController()
