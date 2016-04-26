@@ -1,10 +1,19 @@
 import request from 'supertest'
 import chai from 'chai'
 import app from '../../src/server'
-import models from '../../db/models'
+import models from '../../src/models'
 
 const expect = chai.expect
 const Product = models.products
+
+const checkErrorResponse = function (resText, type) {
+  const err = JSON.parse(resText)
+  expect(err).to.have.keys('error')
+  expect(err.error).to.have.all.keys(['code', 'message'])
+  if (type) {
+    expect(err.error.code).to.have.string(type)
+  }
+}
 
 describe('API: products', function () {
   before(function (done) {
@@ -36,6 +45,23 @@ describe('API: products', function () {
       })
   })
 
+  it('should get 400 on /products POST if bad post data', function (done) {
+    const postData = {
+      'name': 'test',
+      'state': 11   // enum 1,2
+    }
+    request(app)
+      .post('/api/v1/products')
+      .type('json')
+      .send(postData)
+      .expect('Content-Type', /json/)
+      .expect(400)
+      .end(function (err, res) {
+        checkErrorResponse(res.text, 'Error')
+        done(err)
+      })
+  })
+
   it('should list ALL products on /products GET', function (done) {
     request(app)
       .get('/api/v1/products')
@@ -61,9 +87,7 @@ describe('API: products', function () {
       .send(postData)
       .expect(204)
       .end(function (err, res) {
-        if (err) {
-          return done(err)
-        }
+        expect(err).to.be.null
         done()
       })
   })
@@ -79,10 +103,7 @@ describe('API: products', function () {
       .expect('Content-Type', /json/)
       .expect(404)
       .end(function (err, res) {
-        if (err) {
-          return done(err)
-        }
-        done()
+        done(err)
       })
   })
 
@@ -106,10 +127,7 @@ describe('API: products', function () {
       .expect('Content-Type', /json/)
       .expect(404)
       .end(function (err, res) {
-        if (err) {
-          return done(err)
-        }
-        done()
+        done(err)
       })
   })
 
@@ -118,36 +136,79 @@ describe('API: products', function () {
       .delete('/api/v1/products/1')
       .expect(204)
       .end(function (err, res) {
-        if (err) {
-          return done(err)
-        }
+        expect(err).to.be.null
         done()
       })
   })
 
-  it('should return 404 on /products/1 DELETE again', function (done) {
+  it('should get 404 on /products/1 DELETE again', function (done) {
     request(app)
       .delete('/api/v1/products/1')
       .expect('Content-Type', /json/)
       .expect(404)
       .end(function (err, res) {
-        if (err) {
-          return done(err)
-        }
+        done(err)
+      })
+  })
+
+  it('should get an AppError on /products/1/valid GET', function (done) {
+    request(app)
+      .get('/api/v1/products/1/valid')
+      .type('json')
+      .expect('Content-Type', /json/)
+      .expect(500)
+      .end(function (err, res) {
+        checkErrorResponse(res.text, 'AppError')
+        done(err)
+      })
+  })
+  it('should get an Error on /products/11/valid GET', function (done) {
+    request(app)
+      .get('/api/v1/products/11/valid')
+      .type('json')
+      .expect('Content-Type', /json/)
+      .expect(500)
+      .end(function (err, res) {
+        checkErrorResponse(res.text, 'Error')
+        done(err)
+      })
+  })
+
+  it('should get 400 on /products/aaa/valid GET', function (done) {
+    request(app)
+      .get('/api/v1/products/aaa/valid')
+      .type('json')
+      .expect('Content-Type', /json/)
+      .expect(400)
+      .end(function (err, res) {
+        checkErrorResponse(res.text, 'Error')
+        done(err)
+      })
+  })
+
+  it('should get { valid: boolean } on /products/2/valid GET', function (done) {
+    request(app)
+      .get('/api/v1/products/2/valid')
+      .type('json')
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end(function (err, res) {
+        const data = JSON.parse(res.text)
+        expect(err).to.be.null
+        expect(data.valid).a('boolean')
         done()
       })
   })
 
-  it('should got an error on /products/1/cancel POST', function (done) {
+  it('should get an Error on /products/3/valid GET', function (done) {
     request(app)
-      .post('/api/v1/products/1/cancel')
+      .get('/api/v1/products/3/valid')
+      .type('json')
       .expect('Content-Type', /json/)
       .expect(500)
       .end(function (err, res) {
-        if (err) {
-          return done(err)
-        }
-        done()
+        checkErrorResponse(res.text, 'Error')
+        done(err)
       })
   })
 })

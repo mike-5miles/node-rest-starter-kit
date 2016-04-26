@@ -2,7 +2,6 @@ swagger: '2.0'
 info:
   version: 0.0.1
   title: node-rest-starter-kit
-host: '127.0.0.1:3333'
 basePath: /api/v1
 schemes:
   - http
@@ -27,8 +26,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Product'
-        '404':
-          description: Product not found
         '500':
           description: error
           schema:
@@ -121,21 +118,28 @@ paths:
           description: error
           schema:
             $ref: '#/definitions/ErrorResponse'
-  '/products/{id}/cancel':
+  '/products/{id}/valid':
     x-swagger-router-controller: products
-    post:
+    get:
       tags:
         - product
-      operationId: cancel
-      summary: cancel product by id
+      operationId: valid
+      summary: check if product is valid
       parameters:
         - name: id
           in: path
           required: true
           type: integer
       responses:
-        '204':
-          description: product has been cancelled
+        '200':
+          description: if product is valid
+          schema:
+            type: object
+            required:
+              - valid
+            properties:
+              valid:
+                type: boolean
         '404':
           description: product not found  
         '500':
@@ -169,6 +173,19 @@ definitions:
         format: date-time
         description: updated at
   ErrorResponse:
+    type: object
+    required:
+      - error
     properties:
       error:
+        $ref: '#/definitions/ErrorResponse.Error'
+  ErrorResponse.Error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: string
+      message:
         type: string

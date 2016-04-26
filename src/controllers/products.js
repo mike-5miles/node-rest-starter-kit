@@ -5,7 +5,7 @@ module.exports = {
   getAll: function (req, res, next) {
     return ProductService.getAll()
       .then(function (data) {
-        return res.jsonSuccess(CRUD.read, data)
+        return res.jsonResult(CRUD.read, data || [])
       })
   },
 
@@ -13,7 +13,7 @@ module.exports = {
     const id = req.swagger.params.id.value
     return ProductService.getSingle(id)
       .then(function (data) {
-        return res.jsonSuccess(CRUD.read, data)
+        return res.jsonResult(CRUD.read, data)
       })
   },
 
@@ -21,7 +21,7 @@ module.exports = {
     const product = req.swagger.params.product.value
     return ProductService.create(product)
       .then(function (data) {
-        return res.jsonSuccess(CRUD.create, data)
+        return res.jsonResult(CRUD.create, data)
       })
   },
 
@@ -30,7 +30,7 @@ module.exports = {
     const id = req.swagger.params.id.value
     return ProductService.update(id, product)
       .then(function (data) {
-        return res.jsonSuccess(CRUD.update, data)
+        return res.jsonResult(CRUD.update, data)
       })
   },
 
@@ -38,15 +38,15 @@ module.exports = {
     const id = req.swagger.params.id.value
     return ProductService.delete(id)
       .then(function (data) {
-        return res.jsonSuccess(CRUD.delete, data)
+        return res.jsonResult(CRUD.delete, data)
       })
   },
 
-  cancel: function (req, res) {
+  valid: function (req, res) {
     const id = req.swagger.params.id.value
-    return ProductService.cancel(id)
+    return ProductService.valid(id)
       .then(function (data) {
-        return res.jsonSuccess(CRUD.update, data)
+        return res.jsonResult(CRUD.read, data)
       })
   }
 }

@@ -1,14 +1,9 @@
 module.exports = function (grunt) {
-  grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json')
+  var path = require('path')
+  require('load-grunt-config')(grunt, {
+    configPath: path.join(process.cwd(), 'grunt/config'),
+    jitGrunt: {
+      customTasksDir: 'grunt/tasks'
+    }
   })
-
-  grunt.config('mochaTest', require('./grunt/mochaTest.js'))
-  grunt.config('mocha_istanbul', require('./grunt/mocha_istanbul.js'))
-
-  grunt.loadNpmTasks('grunt-mocha-test')
-  grunt.loadNpmTasks('grunt-mocha-istanbul')
-
-  grunt.registerTask('default', ['mochaTest'])
-  grunt.registerTask('coverage', ['mocha_istanbul:coverage'])
 }

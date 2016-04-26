@@ -1,8 +1,7 @@
 .DS_Store
 .idea
-coverage
-logs/*
-config/config.json
+logs/**
+config/database.json
 node_modules
-build
-test-results/*
+dist
+tests/results/**

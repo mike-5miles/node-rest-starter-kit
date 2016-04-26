@@ -1,60 +1,52 @@
 import express from 'express'
 import cors from 'cors'
+import _debug from 'debug'
 
 import swaggerTools from 'swagger-tools'
 import path from 'path'
 import jsyaml from 'js-yaml'
 import fs from 'fs'
 
-import config from '../config/config.json'
-import logger from './middlewares/logger'
-import responseExt from './middlewares/response'
+import config from '../config'
+import expressExt from './middlewares/express_ext'
+import requestLogger from './middlewares/request_logger'
+import asyncWrap from './middlewares/async_wrap'
+import errorHandler from './middlewares/error_handler'
 
-const appLogger = logger.app
-const requestLogger = logger.request
-
+const debug = _debug('app:server')
+expressExt(express)
 const app = express()
 app.use(cors())
 
-// swaggerRouter configuration
-const env = process.env.NODE_ENV || config.env || 'development'
-const options = {
-  useStubs: env === 'development',
-  controllers: path.resolve(__dirname, 'controllers')
-}
-
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-var spec = fs.readFileSync(path.resolve(__dirname, '..', 'config/swagger.yaml'), 'utf8')
-var swaggerDoc = jsyaml.safeLoad(spec)
+const spec = fs.readFileSync(path.resolve(__dirname, '..', 'config/swagger.yaml'), 'utf8')
+const swaggerDoc = jsyaml.safeLoad(spec)
 // Initialize the Swagger middleware
 swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
   app.use(middleware.swaggerMetadata())
-  // Validate Swagger requests
-  app.use(middleware.swaggerValidator())
+  // Validate Swagger requests and responses
+  app.use(middleware.swaggerValidator({
+    validateResponse: true
+  }))
   // Serve the Swagger documents and Swagger UI
   app.use(middleware.swaggerUi())
 
   // request|response logging
   app.use(requestLogger)
-  // build json response
-  app.use(responseExt)
 
-  // enable async/await error handler
-  const wrap = (fn) => (...args) => fn(...args).catch(args[2])
   // Route validated requests to appropriate controller
-  app.use(wrap(middleware.swaggerRouter(options)))
-
+  app.use(asyncWrap(middleware.swaggerRouter({
+    useStubs: config.env === 'development',
+    controllers: path.resolve(__dirname, 'controllers')
+  })))
   // error handler
-  app.use(function (err, req, res, next) {
-    appLogger.error(err)
-    res.status(500).json({error: err.message})
-  })
+  app.use(errorHandler)
 
   // Start the server
-  const port = process.env.PORT || config.server_port || 3000
+  const port = config.server.port
   app.listen(port, function () {
-    appLogger.info('Server listening on port ' + port)
+    debug('Server listening on port ' + port)
   })
 })
 

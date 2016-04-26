@@ -1,4 +1,5 @@
-import { products as Product } from '../../db/models'
+import { products as Product } from '../models'
+import AppError from '../lib/errors'
 
 module.exports = {
   getAll: function () {
@@ -36,10 +37,21 @@ module.exports = {
     })()
   },
 
-  cancel: function (id) {
-    // an error function
+  valid: function (id) {
     return (async function () {
-      throw new Error('My testing error')
+      if (id === 1) {
+        // simulate pre-defined error
+        throw new AppError(AppError.Type.CHECK_FAILED)
+      } else if (id === 2) {
+        // success
+        return { valid: true }
+      } else if (id === 3) {
+        // simulate bad response
+        return { valid111: true }
+      } else {
+        // simulate unhandled exception
+        throw new Error('unhandled exception')
+      }
     })()
   }
 }
