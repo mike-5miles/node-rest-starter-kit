@@ -1,22 +1,7 @@
-import winston from 'winston'
-
 let config = require('./_base')
 
 config.env = 'development'
 
-config.appLogger.transports.push(
-  new (winston.transports.Console)({
-    json: false,
-    colorize: 'all',
-    timestamp: true
-  })
-)
-config.requestLogger.transports.push(
-  new (winston.transports.Console)({
-    json: false,
-    colorize: 'all',
-    timestamp: true
-  })
-)
+config.boss_api_base = 'http://internal-elb-bi-api-test-1536053843.us-east-1.elb.amazonaws.com/bi_api/v1'
 
 module.exports = config
