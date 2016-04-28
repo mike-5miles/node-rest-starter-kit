@@ -7,6 +7,13 @@ config.server = {
   port: 3333
 }
 
+config.api = {
+  timeout: 20000
+}
+config.api.bi = {
+  basePath: 'http://internal-elb-bi-api-test-1536053843.us-east-1.elb.amazonaws.com/bi_api/v1'
+}
+
 config.appLogger = {
   transports: [
     new (winston.transports.File)({
