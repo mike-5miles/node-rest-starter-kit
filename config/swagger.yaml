@@ -276,7 +276,7 @@ paths:
       tags:
         - 广告计划
       summary: 检查置顶计划是否有效
-      description: 检查置顶计划是否有效
+      description: 检查置顶计划是否有效。检查通过返回200，检查失败返回500，返回错误信息
       operationId: checkValid
       parameters:
         - name: id
@@ -378,13 +378,10 @@ definitions:
     type: object
     required:
       - city
-      - date_scope
       - item_id
       - item_title
+      - date_scope
     properties:
-      date_scope:
-        type: string
-        description: 广告投放时间，格式：起始时间戳1:起始时间戳2,起始时间戳3:起始时间戳4
       city:
         type: string
         description: City
@@ -394,6 +391,9 @@ definitions:
       item_title:
         type: string
         description: 商品名称
+      date_scope:
+        type: string
+        description: 置顶历史，格式：起始时间戳1:起始时间戳2,起始时间戳3:起始时间戳4
   PagerMeta:
     description: 分页数据的meta信息
     type: object
