@@ -26,9 +26,10 @@ module.exports = {
       if (cities.length === 0) return
 
       cities.forEach((o) => {
-        o.id = null
         o.related_region = o.region
         o.related_city = o.city
+        o.related_city_id = o.id
+        o.id = null
         o.region = region
         o.city = city
       })

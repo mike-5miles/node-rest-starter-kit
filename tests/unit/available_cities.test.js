@@ -3,6 +3,7 @@ import fetchMock from 'fetch-mock'
 import mockery from 'mockery'
 import chai from 'chai'
 
+import app from '../../src/server'
 import config from '../../config'
 import { AvailableCities, AdPlans, AdPlanCities } from '../../src/models'
 
@@ -12,6 +13,7 @@ const params = {
   country: 'United States',
   region: 'TX',
   city: 'Addison',
+  city_id: 1,
   category_id: 1
 }
 
@@ -28,12 +30,14 @@ const adPlan = {
     ad_plan_id: 1,
     region: params.region,
     city: params.city,
+    city_id: params.city_id,
     begin_time: 111,
     end_time: 222
   }, {
     ad_plan_id: 1,
     region: params.region,
     city: params.city,
+    city_id: params.city_id,
     begin_time: 333,
     end_time: 444
   }]
@@ -70,7 +74,6 @@ describe('API: GET /ad_plans/featured/avaliable_cities: ', function () {
     related_city: params.city
   }]
   const expectEmpty = function (done) {
-    const app = require('../../src/server')
     request(app)
       .get(availableCitiesUrl)
       .expect('Content-Type', /json/)
@@ -85,7 +88,6 @@ describe('API: GET /ad_plans/featured/avaliable_cities: ', function () {
   }
 
   const expectCities = function (apiCalled, countCity, endTime, done) {
-    const app = require('../../src/server')
     request(app)
       .get(availableCitiesUrl)
       .expect('Content-Type', /json/)

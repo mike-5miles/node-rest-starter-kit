@@ -24,6 +24,11 @@ module.exports = {
         defaultValue: '',
         type: Sequelize.STRING(255)
       },
+      city_id: {
+        allowNull: false,
+        defaultValue: 0,
+        type: Sequelize.INTEGER
+      },
       begin_time: {
         allowNull: false,
         defaultValue: 0,

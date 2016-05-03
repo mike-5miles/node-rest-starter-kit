@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import FormData from 'form-data'
 import _debug from 'debug'
 
@@ -12,11 +11,12 @@ module.exports = {
     const url = config.api.bi.basePath + '/citys/'
     debug(url)
 
-    var form = new FormData()
+    let form = new FormData()
     form.append('country', country)
     form.append('region', region)
     form.append('city', city)
 
+    const fetch = require('node-fetch')
     return fetch(url, { method: 'POST', body: form, timeout: config.api.timeout })
       .then(function (res) {
         return res.json()

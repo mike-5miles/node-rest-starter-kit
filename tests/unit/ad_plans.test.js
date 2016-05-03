@@ -1,6 +1,7 @@
 import request from 'supertest'
 import chai from 'chai'
 
+import app from '../../src/server'
 import { AdPlans, AdPlanCities, Items, Users } from '../../src/models'
 
 const expect = chai.expect
@@ -24,6 +25,7 @@ const adPlan = {
     {
       'region': 'string',
       'city': 'string',
+      'city_id': 11,
       'begin_time': 1451577600000,
       'end_time': 4070880000000
     }
@@ -46,7 +48,7 @@ describe('API: POST /ad_plans: ', function () {
 
   describe('if no valid user in header', function () {
     it('return error 400 if no header', function (done) {
-      request(require('../../src/server'))
+      request(app)
         .post(adPlanUrl)
         .type('json')
         .expect('Content-Type', /json/)
@@ -56,7 +58,7 @@ describe('API: POST /ad_plans: ', function () {
         })
     })
     it('return error 500 if invalid user in header', function (done) {
-      request(require('../../src/server'))
+      request(app)
         .post(adPlanUrl)
         .type('json')
         .set('X-FIVEMILES-USER-ID', 'invalid')
@@ -73,7 +75,7 @@ describe('API: POST /ad_plans: ', function () {
 
   describe('if valid user in header', function () {
     it('should return 201', function (done) {
-      request(require('../../src/server'))
+      request(app)
         .post(adPlanUrl)
         .type('json')
         .send(adPlan)

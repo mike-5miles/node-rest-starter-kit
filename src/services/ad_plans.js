@@ -37,13 +37,13 @@ module.exports = {
     })()
   },
 
-  pay: function (id, orderId) {
+  pay: function (id, orderNumber, payState) {
     return (async function () {
       const plan = await AdPlans.findById(id)
       if (plan === null) return null
       return plan.update({
-        order_id: orderId,
-        state: constants.AD_PLAN_STATE.PAID})
+        order_number: orderNumber,
+        state: payState})
     })()
   }
 }

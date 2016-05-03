@@ -30,7 +30,7 @@ const isValid = function (plan) {
           AND p2.id <> p.id
           AND pc.region = pc2.region
           AND pc.city = pc2.city
-          AND p.begin_time < p2.end_time
+          AND p.begin_time <= p2.end_time
       ) limit 1
     `
     const invalidCity = await db.sequelize.query(sql,
@@ -48,7 +48,7 @@ module.exports = {
     return (async function () {
       await AvailableCities.getAvailableCities(country, region, city)
       const sql = `
-        SELECT ac.related_region AS region, ac.related_city AS city, 
+        SELECT ac.related_region AS region, ac.related_city AS city, ac.related_city_id AS city_id,
           MAX(pc.end_time) AS end_time
         FROM available_cities ac 
         LEFT JOIN (
@@ -58,7 +58,7 @@ module.exports = {
           WHERE p.category_id=? AND p.ad_type=? AND p.state=?
         ) pc ON pc.city = ac.related_city AND pc.region = ac.related_region 
         WHERE ac.region=? AND ac.city=?
-        GROUP BY ac.related_city, ac.related_region
+        GROUP BY ac.related_city, ac.related_region, ac.related_city_id
       `
       return await db.sequelize.query(sql,
         { replacements: [categoryId, constants.AD_PLAN_AD_TYPE.FEATURED, constants.AD_PLAN_STATE.PAID, region, city],

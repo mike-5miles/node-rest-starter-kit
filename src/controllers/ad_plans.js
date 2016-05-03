@@ -14,8 +14,9 @@ module.exports = {
 
   pay: function (req, res, next) {
     const id = req.swagger.params.id.value
-    const orderId = req.swagger.params.order.value.order_id
-    return AdPlanService.pay(id, orderId)
+    const orderNumber = req.swagger.params.order.value.order_number
+    const payState = req.swagger.params.order.value.state
+    return AdPlanService.pay(id, orderNumber, payState)
       .then(function (data) {
         return res.jsonResult(CRUD.update, data)
       })

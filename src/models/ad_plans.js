@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
     state: DataTypes.INTEGER,
     category_id: DataTypes.INTEGER,
     item_id: DataTypes.INTEGER,
-    order_id: DataTypes.INTEGER,
+    order_number: DataTypes.STRING,
     // order_state: DataTypes.INTEGER,
     fuzzy_id: DataTypes.STRING
   }, {

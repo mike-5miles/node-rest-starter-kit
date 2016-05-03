@@ -63,10 +63,10 @@ module.exports = {
         defaultValue: 0,
         type: Sequelize.INTEGER
       },
-      order_id: {
+      order_number: {
         allowNull: false,
-        defaultValue: 0,
-        type: Sequelize.INTEGER
+        defaultValue: '',
+        type: Sequelize.STRING
       },
       state: {
         allowNull: false,

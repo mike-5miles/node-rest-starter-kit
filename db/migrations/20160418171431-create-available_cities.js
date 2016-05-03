@@ -29,6 +29,11 @@ module.exports = {
         defaultValue: '',
         type: Sequelize.STRING(100)
       },
+      related_city_id: {
+        allowNull: false,
+        defaultValue: 0,
+        type: Sequelize.INTEGER
+      },
       created_at: {
         allowNull: false,
         defaultValue: Sequelize.fn('now'),

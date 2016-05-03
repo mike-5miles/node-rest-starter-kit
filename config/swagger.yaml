@@ -144,7 +144,7 @@ paths:
           schema:
             type: object
             required:
-              - order_id
+              - order_number
               - state
             properties:
               state:
@@ -153,9 +153,9 @@ paths:
                 enum: 
                   - 2
                   - 3
-              order_id:
-                type: integer
-                description: 订单ID
+              order_number:
+                type: string
+                description: 订单编号
       responses:
         '204':
           $ref: '#/responses/NoContent'
@@ -214,6 +214,9 @@ paths:
                 city:
                   type: string
                   description: 城市
+                city_id:
+                  type: integer
+                  description: 城市ID
                 end_time:
                   type: 
                     - integer
@@ -276,7 +279,7 @@ paths:
       tags:
         - 广告计划
       summary: 检查置顶计划是否有效
-      description: 检查置顶计划是否有效。检查通过返回200，检查失败返回500，返回错误信息
+      description: '检查置顶计划是否有效。检查通过返回200  {valid: true}；检查失败返回500，包含具体的错误信息'
       operationId: checkValid
       parameters:
         - name: id
@@ -355,6 +358,7 @@ definitions:
     required:
       - region
       - city
+      - city_id
       - begin_time
       - end_time
     properties:
@@ -364,6 +368,9 @@ definitions:
       city:
         type: string
         description: 城市
+      city_id:
+        type: integer
+        description: 城市ID
       begin_time:
         type: integer
         format: int64

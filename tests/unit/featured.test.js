@@ -1,6 +1,7 @@
 import request from 'supertest'
 import chai from 'chai'
 
+import app from '../../src/server'
 import { AdPlans, AdPlanCities, Items, Users } from '../../src/models'
 
 const expect = chai.expect
@@ -53,7 +54,7 @@ describe('API: GET /ad_plans/featured/history: ', function () {
 
   describe('if no valid user in header', function () {
     it('return error 400 if no header', function (done) {
-      request(require('../../src/server'))
+      request(app)
         .get(featuredHistoryUrl)
         .expect('Content-Type', /json/)
         .expect(400)
@@ -62,7 +63,7 @@ describe('API: GET /ad_plans/featured/history: ', function () {
         })
     })
     it('return error 500 if invalid user in header', function (done) {
-      request(require('../../src/server'))
+      request(app)
         .get(featuredHistoryUrl)
         .set('X-FIVEMILES-USER-ID', 'invalid')
         .expect('Content-Type', /json/)
@@ -77,7 +78,7 @@ describe('API: GET /ad_plans/featured/history: ', function () {
 
   describe('if valid user in header', function () {
     it('should return empty array if nothing in db', function (done) {
-      request(require('../../src/server'))
+      request(app)
         .get(featuredHistoryUrl)
         .set('X-FIVEMILES-USER-ID', 'ABCDE')
         .expect('Content-Type', /json/)
@@ -102,7 +103,7 @@ describe('API: GET /ad_plans/featured/history: ', function () {
       })
 
       it('should return results', function (done) {
-        request(require('../../src/server'))
+        request(app)
           .get(featuredHistoryUrl)
           .set('X-FIVEMILES-USER-ID', 'ABCDE')
           .expect('Content-Type', /json/)
@@ -137,7 +138,7 @@ describe('API: GET /ad_plans/featured/{id}/valid: ', function () {
   })
 
   it('return 404 if id not found', function (done) {
-    request(require('../../src/server'))
+    request(app)
       .get(validUrl.replace('{id}', 111))
       .expect('Content-Type', /json/)
       .expect(404)
@@ -147,7 +148,7 @@ describe('API: GET /ad_plans/featured/{id}/valid: ', function () {
   })
 
   it('return 200 if valid', function (done) {
-    request(require('../../src/server'))
+    request(app)
       .get(validUrl.replace('{id}', 1))
       .expect('Content-Type', /json/)
       .expect(200)
@@ -175,7 +176,7 @@ describe('API: GET /ad_plans/featured/{id}/valid: ', function () {
     })
 
     it('return FEATURED_PLAN_NOT_PENDING', function (done) {
-      request(require('../../src/server'))
+      request(app)
         .get(validUrl.replace('{id}', 1))
         .expect('Content-Type', /json/)
         .expect(500)
@@ -203,7 +204,7 @@ describe('API: GET /ad_plans/featured/{id}/valid: ', function () {
     })
 
     it('return FEATURED_LISTING_CHECK_FAILED', function (done) {
-      request(require('../../src/server'))
+      request(app)
         .get(validUrl.replace('{id}', 1))
         .expect('Content-Type', /json/)
         .expect(500)
@@ -229,7 +230,7 @@ describe('API: GET /ad_plans/featured/{id}/valid: ', function () {
     })
 
     it('return FEATURED_CITY_CHECK_FAILED', function (done) {
-      request(require('../../src/server'))
+      request(app)
         .get(validUrl.replace('{id}', 1))
         .expect('Content-Type', /json/)
         .expect(500)
