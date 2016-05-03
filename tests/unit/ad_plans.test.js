@@ -54,7 +54,8 @@ describe('API: POST /ad_plans: ', function () {
         .expect('Content-Type', /json/)
         .expect(400)
         .end(function (err, res) {
-          done(err)
+          expect(err).to.be.null
+          done()
         })
     })
     it('return error 500 if invalid user in header', function (done) {
@@ -68,7 +69,8 @@ describe('API: POST /ad_plans: ', function () {
         .end(function (err, res) {
           const data = JSON.parse(res.text)
           expect(data.error.code).to.equal('AppError: INVALID_USER')
-          done(err)
+          expect(err).to.be.null
+          done()
         })
     })
   })
@@ -84,13 +86,43 @@ describe('API: POST /ad_plans: ', function () {
         .expect(201)
         .end(function (err, res) {
           const data = JSON.parse(res.text)
-          console.log(data)
-          // expect(data.meta.total_count).to.equal(0)
-          // expect(data.meta.next).to.be.null
-          // expect(data.meta.previous).to.be.null
-          // expect(data.objects).to.be.empty
-          done(err)
+          expect(data.id).to.equal(1)
+          expect(err).to.be.null
+          done()
         })
     })
+  })
+})
+
+describe('API: POST /ad_plans/{id}/pay: ', function () {
+  const payUrl = '/api/v1/ad_plans/{id}/pay'
+
+  it('return 404 if id not found', function (done) {
+    request(app)
+      .post(payUrl.replace('{id}', 111))
+      .type('json')
+      .send({
+        order_number: 'order1',
+        state: 2})
+      .expect('Content-Type', /json/)
+      .expect(404)
+      .end(function (err, res) {
+        expect(err).to.be.null
+        done()
+      })
+  })
+
+  it('return 204 if fulfilled successfully', function (done) {
+    request(app)
+      .post(payUrl.replace('{id}', 1))
+      .type('json')
+      .send({
+        order_number: 'order1',
+        state: 2})
+      .expect(204)
+      .end(function (err, res) {
+        expect(err).to.be.null
+        done()
+      })
   })
 })

@@ -59,7 +59,8 @@ describe('API: GET /ad_plans/featured/history: ', function () {
         .expect('Content-Type', /json/)
         .expect(400)
         .end(function (err, res) {
-          done(err)
+          expect(err).to.be.null
+          done()
         })
     })
     it('return error 500 if invalid user in header', function (done) {
@@ -71,7 +72,8 @@ describe('API: GET /ad_plans/featured/history: ', function () {
         .end(function (err, res) {
           const data = JSON.parse(res.text)
           expect(data.error.code).to.equal('AppError: INVALID_USER')
-          done(err)
+          expect(err).to.be.null
+          done()
         })
     })
   })
@@ -89,7 +91,8 @@ describe('API: GET /ad_plans/featured/history: ', function () {
           expect(data.meta.next).to.be.null
           expect(data.meta.previous).to.be.null
           expect(data.objects).to.be.empty
-          done(err)
+          expect(err).to.be.null
+          done()
         })
     })
     describe('if something in db', function () {
@@ -114,7 +117,8 @@ describe('API: GET /ad_plans/featured/history: ', function () {
             expect(data.meta.next).to.be.null
             expect(data.meta.previous).to.be.null
             expect(data.objects.length).to.equal(1)
-            done(err)
+            expect(err).to.be.null
+            done()
           })
       })
     })
@@ -143,7 +147,8 @@ describe('API: GET /ad_plans/featured/{id}/valid: ', function () {
       .expect('Content-Type', /json/)
       .expect(404)
       .end(function (err, res) {
-        done(err)
+        expect(err).to.be.null
+        done()
       })
   })
 
@@ -153,7 +158,10 @@ describe('API: GET /ad_plans/featured/{id}/valid: ', function () {
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
-        done(err)
+        expect(err).to.be.null
+        const data = JSON.parse(res.text)
+        expect(data.valid, true)
+        done()
       })
   })
 
@@ -183,7 +191,8 @@ describe('API: GET /ad_plans/featured/{id}/valid: ', function () {
         .end(function (err, res) {
           const data = JSON.parse(res.text)
           expect(data.error.code).to.equal('AppError: FEATURED_PLAN_NOT_PENDING')
-          done(err)
+          expect(err).to.be.null
+          done()
         })
     })
   })
@@ -211,7 +220,8 @@ describe('API: GET /ad_plans/featured/{id}/valid: ', function () {
         .end(function (err, res) {
           const data = JSON.parse(res.text)
           expect(data.error.code).to.equal('AppError: FEATURED_LISTING_CHECK_FAILED')
-          done(err)
+          expect(err).to.be.null
+          done()
         })
     })
   })
@@ -237,7 +247,8 @@ describe('API: GET /ad_plans/featured/{id}/valid: ', function () {
         .end(function (err, res) {
           const data = JSON.parse(res.text)
           expect(data.error.code).to.equal('AppError: FEATURED_CITY_CHECK_FAILED')
-          done(err)
+          expect(err).to.be.null
+          done()
         })
     })
   })

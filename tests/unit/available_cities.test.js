@@ -79,10 +79,10 @@ describe('API: GET /ad_plans/featured/avaliable_cities: ', function () {
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
-        expect(err).to.be.null
         expect(fetchMock.called(cityApiUrl)).to.be.true
         const data = JSON.parse(res.text)
         expect(data).to.be.empty
+        expect(err).to.be.null
         done()
       })
   }
@@ -93,11 +93,11 @@ describe('API: GET /ad_plans/featured/avaliable_cities: ', function () {
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
-        expect(err).to.be.null
         expect(fetchMock.called(cityApiUrl)).to.equal(apiCalled)
         const data = JSON.parse(res.text)
         expect(data.length).to.equal(countCity)
         expect(data[0].end_time).to.equal(endTime)
+        expect(err).to.be.null
         done()
       })
   }
